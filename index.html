@@ -642,7 +642,17 @@ html[data-store-theme="halloween"] .store-theme-message{border-color:#fb923c55;b
 html[data-store-theme="christmas"] .store-theme-message,html[data-store-theme="newyear"] .store-theme-message{border-color:#f3d28155;background:#f3d28110;color:#f3d281;}
 .intro-theme-message[hidden],.store-theme-message[hidden]{display:none!important;}
 @media print{.store-theme-message{display:none!important;}}
-</style><style>.footer-admin-brand{appearance:none;background:none;border:0;margin:0;padding:8px 0;min-height:44px;text-align:inherit;cursor:pointer;}.footer-admin-brand:focus-visible{outline:2px solid currentColor;outline-offset:4px;border-radius:4px;}</style></head>
+</style><style>.footer-admin-brand{appearance:none;background:none;border:0;margin:0;padding:8px 0;min-height:44px;text-align:inherit;cursor:pointer;}.footer-admin-brand:focus-visible{outline:2px solid currentColor;outline-offset:4px;border-radius:4px;}</style><style id="product-sale-prices">
+.product-price-group,#detailPrice{display:flex;align-items:center;gap:6px 8px;flex-wrap:wrap;}
+.product-normal-price{display:block;flex-basis:100%;color:#94a3b8;font-size:12px;font-weight:400;line-height:1.4;text-decoration:line-through;}
+.product-current-price{font-size:inherit;font-weight:800;white-space:nowrap;color:inherit;}
+.product-sale-badge{display:inline-flex;align-items:center;white-space:nowrap;border-radius:6px;padding:3px 6px;background:#16a34a20;color:#86efac;font-size:11px;font-weight:700;line-height:1.3;}
+#productGrid .product-current-price{color:#38bdf8;}
+html[data-store-theme="halloween"] #productGrid .product-current-price{color:#fb923c;}
+html[data-store-theme="christmas"] #productGrid .product-current-price,html[data-store-theme="newyear"] #productGrid .product-current-price{color:#f3d281;}
+.admin-inventory-table .product-current-price{display:inline-block;}
+.admin-inventory-table .product-sale-badge{margin-left:6px;}
+</style></head>
 
     <div id="pcbestIntro" aria-label="Bienvenido a PC BEST">
         <div class="intro-halloween-scene" aria-hidden="true"><span class="intro-halloween-moon"></span><span class="intro-halloween-bat bat-one"></span><span class="intro-halloween-bat bat-two"></span><span class="intro-halloween-bat bat-three"></span><span class="intro-halloween-fog"></span></div>
@@ -1346,8 +1356,18 @@ html[data-store-theme="christmas"] .store-theme-message,html[data-store-theme="n
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:col-start-2 lg:row-start-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Precio (S/.)</label>
-                        <input type="number" step="0.01" id="prodPrice" required placeholder="0.00" class="w-full bg-[#030712] border border-sky-950 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-sky-500">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Precio normal (S/.)</label>
+                        <input type="number" step="0.01" id="prodPrice" min="0" required placeholder="0.00" class="w-full bg-[#030712] border border-sky-950 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-sky-500">
+                    </div>
+                    <div>
+                        <label for="prodSalePrice" class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Precio de oferta (S/.)</label>
+                        <input type="number" step="0.01" min="0" id="prodSalePrice" placeholder="Sin oferta" class="w-full bg-[#030712] border border-sky-950 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-sky-500">
+                        <p class="text-xs text-slate-400 mt-2">Debe ser menor al precio normal. Déjalo vacío para quitar la oferta.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                            <label class="admin-field-label" for="prodSaleStart">Inicio (hora de Perú)<input type="datetime-local" id="prodSaleStart" class="admin-field"></label>
+                            <label class="admin-field-label" for="prodSaleEnd">Fin (hora de Perú)<input type="datetime-local" id="prodSaleEnd" class="admin-field"></label>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2">Sin inicio: inmediata. Sin fin: no vence. Al finalizar se muestra el precio normal.</p>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Stock</label>
@@ -1644,6 +1664,11 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             if(!Object.values(data.subcategories).every(v=>Array.isArray(v)&&v.every(x=>typeof x==='string')))invalid();
             for(const item of data.products){
                 if(!object(item)||!['string','number'].includes(typeof item.id)||typeof item.name!=='string'||typeof item.category!=='string'||typeof item.price!=='number'||!Number.isFinite(item.price)||item.price<0||!Number.isFinite(Number(item.stock))||Number(item.stock)<0)invalid();
+            }
+            for(const item of data.products)if(item.salePrice!==undefined&&item.salePrice!==null&&(typeof item.salePrice!=='number'||!Number.isFinite(item.salePrice)||item.salePrice<0||item.salePrice>=item.price))invalid();
+            for(const item of data.products){
+                for(const key of ['saleStartsAt','saleEndsAt'])if(item[key]!==undefined&&item[key]!==''&&(typeof item[key]!=='string'||!Number.isFinite(Date.parse(item[key]))))invalid();
+                if(item.saleStartsAt&&item.saleEndsAt&&Date.parse(item.saleEndsAt)<=Date.parse(item.saleStartsAt))invalid();
             }
             if(!data.promoBanners.every(object)||!data.discountCodes.every(object))invalid();
             for(const settings of [data.aboutUs,data.paymentSettings])if(!Object.values(settings).every(v=>typeof v==='string'))invalid();
@@ -1977,7 +2002,56 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             animateFilteredProducts();
         }
 
+        let productSaleTimer=null,currentDetailProductId=null;
+        function productSaleState(product,now=Date.now()){
+            if(typeof product.salePrice!=='number'||!Number.isFinite(product.salePrice)||product.salePrice<0||product.salePrice>=Number(product.price))return '';
+            const start=product.saleStartsAt?Date.parse(product.saleStartsAt):null,end=product.saleEndsAt?Date.parse(product.saleEndsAt):null;
+            if((start!==null&&!Number.isFinite(start))||(end!==null&&!Number.isFinite(end))||(start!==null&&end!==null&&end<=start))return 'Fecha inválida';
+            if(end!==null&&now>=end)return 'Finalizada';
+            if(start!==null&&now<start)return 'Programada';
+            return 'Oferta activa';
+        }
+        function getProductPricing(product,now=Date.now()){
+            const normal=Number(product.price)||0;
+            const onSale=productSaleState(product,now)==='Oferta activa';
+            const sale=product.salePrice;
+            return {normal,current:onSale?sale:normal,onSale,percent:onSale?Math.floor((normal-sale)/normal*100+1e-8):0};
+        }
+        function scheduleProductSaleBoundary(){
+            clearTimeout(productSaleTimer);
+            const now=Date.now(),future=products.filter(p=>typeof p.salePrice==='number').flatMap(p=>[Date.parse(p.saleStartsAt),Date.parse(p.saleEndsAt)]).filter(t=>Number.isFinite(t)&&t>now);
+            if(future.length)productSaleTimer=setTimeout(refreshTimedProductPrices,Math.min(Math.max(1,Math.min(...future)-now),2147483647));
+        }
+        function refreshPaymentSnapshotPrices(){
+            if(!paymentSnapshot||document.getElementById('paymentOptionsModal').classList.contains('hidden'))return false;
+            const totals=calculateCartTotals();
+            const items=cart.map(item=>({name:item.name,qty:item.qty,price:Number(item.price)}));
+            const changed=paymentSnapshot.total!==totals.total||JSON.stringify(paymentSnapshot.items)!==JSON.stringify(items);
+            paymentSnapshot={...paymentSnapshot,items,total:totals.total,subtotal:totals.subtotal,discount:totals.discount};
+            document.getElementById('paymentTotal').textContent='Total de productos: S/. '+totals.total.toFixed(2);
+            if(changed)document.getElementById('paymentCopyStatus').textContent='Los precios del pedido se actualizaron. Revisa el total antes de pagar o enviar el pedido.';
+            return changed;
+        }
+        function refreshTimedProductPrices(){
+            renderProducts();renderCartCount();
+            if(!document.getElementById('adminPanelModal').classList.contains('hidden'))renderAdminProducts();
+            if(!document.getElementById('cartModal').classList.contains('hidden'))renderCartModalList();
+            if(currentDetailProductId!==null&&!document.getElementById('productDetailModal').classList.contains('hidden')){
+                const product=products.find(p=>p.id===currentDetailProductId);
+                if(product)document.getElementById('detailPrice').innerHTML=productPriceMarkup(product);
+            }
+            refreshPaymentSnapshotPrices();
+        }
+        document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTimedProductPrices();});
+        function getProductPrice(product){return getProductPricing(product).current;}
+        function productPriceMarkup(product){
+            const price=getProductPricing(product);
+            return (price.onSale?'<del class="product-normal-price" aria-label="Precio anterior">S/ '+price.normal.toFixed(2)+'</del>':'')+
+                '<span class="product-current-price">S/ '+price.current.toFixed(2)+'</span>'+
+                (price.onSale?'<span class="product-sale-badge">'+(price.percent>0?'-'+price.percent+' %':'Oferta')+'</span>':'');
+        }
         function renderProducts() {
+            scheduleProductSaleBoundary();
             const grid = document.getElementById('productGrid');
             const noResults = document.getElementById('noResults');
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
@@ -1986,7 +2060,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             let filtered = products.filter(p => {
                 // Los productos desactivados se mantienen en administración, pero no se muestran en la tienda.
                 if (p.active === false) return false;
-                const price = Number(p.price) || 0;
+                const price = getProductPrice(p);
                 const matchCat = currentCategory === 'todos' || p.category === currentCategory;
                 const matchSub = currentSubcategory === 'todos' || p.subcategory === currentSubcategory;
                 const matchSearch = productMatchesSearch(p, searchVal);
@@ -1995,9 +2069,9 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             });
 
             if (productSort === 'priceAsc') {
-                filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+                filtered.sort((a, b) => getProductPrice(a) - getProductPrice(b));
             } else if (productSort === 'priceDesc') {
-                filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+                filtered.sort((a, b) => getProductPrice(b) - getProductPrice(a));
             }
 
             counter.innerText = `Mostrando ${filtered.length} producto(s)`;
@@ -2032,7 +2106,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
                             <div class="catalog-card-footer flex items-center justify-between border-t border-sky-950">
                                 <div>
                                     <span class="text-[10px] text-slate-400 block font-bold uppercase">Precio</span>
-                                    <span class="catalog-card-price text-lg font-black ${isOferta ? 'text-amber-400' : 'text-sky-400'}">S/. ${p.price.toFixed(2)}</span>
+                                    <div class="catalog-card-price product-price-group">${productPriceMarkup(p)}</div>
                                 </div>
                                 <button type="button" onclick="addToCart(${p.id})" aria-label="Agregar a la cotización" title="Agregar a la cotización" class="catalog-card-add ${isOferta ? 'bg-amber-500 hover:bg-amber-400 shadow-amber-500/30 text-slate-950' : 'bg-sky-500 hover:bg-sky-400 shadow-sky-500/30 text-white'} p-3 rounded-2xl shadow-lg transition-all">
                                     <i class="fa-solid fa-cart-plus text-sm"></i>
@@ -2061,7 +2135,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
         }
 
         function initializePriceFilter() {
-            const prices = products.map(p => Number(p.price) || 0);
+            const prices = products.map(p => getProductPrice(p));
             const maxPrice = Math.max(0, ...prices);
             const roundedMax = Math.max(100, Math.ceil(maxPrice / 10) * 10);
             const minInput = document.getElementById('priceMinInput');
@@ -2168,6 +2242,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
         }
 
         function openDetailModal(id) {
+            currentDetailProductId=id;
             const p = products.find(x => x.id === id);
             if (!p) return;
             const images = getProductImages(p);
@@ -2182,7 +2257,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
                 subBadge.classList.add('hidden');
             }
             document.getElementById('detailName').innerText = p.name;
-            document.getElementById('detailPrice').innerText = `S/. ${p.price.toFixed(2)}`;
+            document.getElementById('detailPrice').innerHTML = productPriceMarkup(p);
             document.getElementById('detailDesc').innerText = p.desc;
             const stockEl = document.getElementById('detailStock');
             stockEl.innerText = `Stock: ${p.stock}`;
@@ -2193,6 +2268,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
         }
 
         function closeDetailModal() {
+            currentDetailProductId=null;
             document.getElementById('productDetailModal').classList.add('hidden');
         }
 
@@ -2225,15 +2301,17 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             if (!p) return;
             const existing = cart.find(x => x.id === id);
             if (existing) {
+                existing.price=getProductPrice(p);
                 existing.qty++;
             } else {
-                cart.push({ ...p, qty: 1 });
+                cart.push({ ...p, price:getProductPrice(p), qty: 1 });
             }
             renderCartCount();
             bounceQuotationCart();
         }
 
         function calculateCartTotals() {
+            cart.forEach(item=>{const product=products.find(p=>p.id===item.id);if(product)item.price=getProductPrice(product);});
             const subtotal = cart.reduce((acc, item) => acc + (Number(item.price) * item.qty), 0);
             let discount = 0;
             let codeObj = null;
@@ -2825,7 +2903,8 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
                 const cell=(label)=>{const td=document.createElement('td');td.dataset.label=label;row.append(td);return td;};
                 const identity=cell('Producto'),image=document.createElement('img'),name=document.createElement('span');identity.className='inventory-identity';image.src=product.image||'https://placehold.co/100x100/0b1329/38bdf8?text=PC';image.alt='';image.loading='lazy';name.textContent=product.name;identity.append(image,name);
                 cell('Categoría').textContent=product.category+(product.subcategory?' › '+product.subcategory:'');
-                cell('Precio').textContent='S/. '+Number(product.price).toFixed(2);
+                const priceCell=cell('Precio');priceCell.innerHTML=productPriceMarkup(product);
+                const saleState=productSaleState(product);if(saleState){const state=document.createElement('small');state.style.display='block';state.textContent=saleState+' (Perú)';priceCell.append(state);}
                 const stock=cell('Stock');stock.textContent=Number(product.stock)||0;stock.style.color=Number(product.stock)<=0?'#fca5a5':Number(product.stock)<=5?'#fcd34d':'#6ee7b7';
                 cell('Visibilidad').textContent=product.active===false?'Oculto':'Visible';
                 const actions=cell('Acciones');actions.className='inventory-actions';
@@ -2938,6 +3017,9 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
                 document.getElementById('prodCategory').value = p.category;
                 updateSubcategoryDropdownOptions(p.subcategory);
                 document.getElementById('prodPrice').value = p.price;
+                document.getElementById('prodSalePrice').value = typeof p.salePrice==='number'?p.salePrice:'';
+                document.getElementById('prodSaleStart').value=peruDateInput(p.saleStartsAt);
+                document.getElementById('prodSaleEnd').value=peruDateInput(p.saleEndsAt);
                 document.getElementById('prodStock').value = p.stock;
                 const existingImages = getProductImages(p);
                 document.getElementById('prodImage').value = existingImages[0] || '';
@@ -3063,6 +3145,15 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             const category = document.getElementById('prodCategory').value;
             const subcategory = document.getElementById('prodSubcategory').value;
             const price = parseFloat(document.getElementById('prodPrice').value);
+            const saleInput=document.getElementById('prodSalePrice');
+            const salePrice=saleInput.value.trim()===''?null:Number(saleInput.value);
+            if(!Number.isFinite(price)||price<0){alert('Escribe un precio normal válido.');return;}
+            if(salePrice!==null&&(!Number.isFinite(salePrice)||salePrice<0||salePrice>=price)){alert('El precio de oferta debe ser menor al precio normal. Déjalo vacío para quitar la oferta.');saleInput.focus();return;}
+            const startValue=document.getElementById('prodSaleStart').value,endValue=document.getElementById('prodSaleEnd').value;
+            const dateInPeru=value=>value?new Date(value+':00-05:00').toISOString():'';
+            let saleStartsAt='',saleEndsAt='';
+            try{if(salePrice!==null){saleStartsAt=dateInPeru(startValue);saleEndsAt=dateInPeru(endValue);}}catch{alert('Revisa las fechas de la oferta.');return;}
+            if(saleStartsAt&&saleEndsAt&&Date.parse(saleEndsAt)<=Date.parse(saleStartsAt)){alert('El fin de la oferta debe ser posterior al inicio (hora de Perú).');document.getElementById('prodSaleEnd').focus();return;}
             const stock = parseInt(document.getElementById('prodStock').value);
             const image = document.getElementById('prodImage').value.trim();
             const urlImages = getFormImageUrls();
@@ -3077,6 +3168,9 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
                     p.category = category;
                     p.subcategory = subcategory;
                     p.price = price;
+                    p.salePrice = salePrice;
+                    p.saleStartsAt=saleStartsAt;
+                    p.saleEndsAt=saleEndsAt;
                     p.stock = stock;
                     p.image = images[0] || image;
                     p.images = images;
@@ -3084,7 +3178,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
                 }
             } else {
                 const newId = products.length > 0 ? Math.max(...products.map(x => x.id)) + 1 : 1;
-                products.push({ ...(duplicatedProductTemplate?{...duplicatedProductTemplate,active:false}:{}), id: newId, name, category, subcategory, price, stock, image: images[0] || image, images, desc });
+                products.push({ ...(duplicatedProductTemplate?{...duplicatedProductTemplate,active:false}:{}), id: newId, name, category, subcategory, price, salePrice, saleStartsAt, saleEndsAt, stock, image: images[0] || image, images, desc });
             }
 
             duplicatedProductTemplate=null;
@@ -3241,6 +3335,7 @@ async function copyPaymentValue(value){
 }
 function sendPaymentReceipt(event){
  event.preventDefault();if(!paymentSnapshot)return;
+ if(refreshPaymentSnapshotPrices())return;
  const name=document.getElementById('paymentCustomer').value.trim();if(!name){document.getElementById('paymentCustomer').focus();return;}
  const method=document.getElementById('paymentMethod').value;
  const lines=[
