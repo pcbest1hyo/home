@@ -642,7 +642,7 @@ html[data-store-theme="halloween"] .store-theme-message{border-color:#fb923c55;b
 html[data-store-theme="christmas"] .store-theme-message,html[data-store-theme="newyear"] .store-theme-message{border-color:#f3d28155;background:#f3d28110;color:#f3d281;}
 .intro-theme-message[hidden],.store-theme-message[hidden]{display:none!important;}
 @media print{.store-theme-message{display:none!important;}}
-</style></head>
+</style><style>.footer-admin-brand{appearance:none;background:none;border:0;margin:0;padding:8px 0;min-height:44px;text-align:inherit;cursor:pointer;}.footer-admin-brand:focus-visible{outline:2px solid currentColor;outline-offset:4px;border-radius:4px;}</style></head>
 
     <div id="pcbestIntro" aria-label="Bienvenido a PC BEST">
         <div class="intro-halloween-scene" aria-hidden="true"><span class="intro-halloween-moon"></span><span class="intro-halloween-bat bat-one"></span><span class="intro-halloween-bat bat-two"></span><span class="intro-halloween-bat bat-three"></span><span class="intro-halloween-fog"></span></div>
@@ -711,9 +711,6 @@ html[data-store-theme="christmas"] .store-theme-message,html[data-store-theme="n
             </div>
 
             <div class="flex items-center gap-2.5">
-                <button onclick="requestPin()" class="bg-[#0f172a] hover:bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 px-3 py-2.5 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold" title="Abrir panel de administración" aria-label="Abrir panel de administración">
-                    <i class="fa-solid fa-user text-sm"></i>
-                </button>
                 <button type="button" aria-label="Abrir cotización" onclick="toggleCartModal()" class="relative bg-[#0f172a] border border-sky-500/30 hover:border-sky-500 p-2.5 rounded-xl transition-all flex items-center gap-2 group">
                     <i class="fa-solid fa-cart-shopping text-sky-400 text-lg"></i>
                     <span class="hidden sm:inline text-xs font-bold text-slate-300 group-hover:text-white">Cotizar</span>
@@ -1452,7 +1449,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
     <footer class="bg-[#0b1329] border-t border-sky-950/60 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-center md:text-left">
-                <div class="flex items-center justify-center md:justify-start gap-2"><span class="font-black text-lg tracking-tight text-white">PC BEST</span><span class="text-[9px] font-black tracking-[0.18em] text-sky-400">HUANCAYO</span></div>
+                <div class="flex items-center justify-center md:justify-start gap-2"><button type="button" onclick="requestPin()" aria-label="PC BEST: acceso a administración" class="footer-admin-brand font-black text-lg tracking-tight text-white">PC BEST</button><span class="text-[9px] font-black tracking-[0.18em] text-sky-400">HUANCAYO</span></div>
                 <p class="text-xs text-slate-400 mt-1">Tu tienda tecnológica especializada en hardware, gaming y ensamblajes en Huancayo.</p>
             </div>
             <div class="flex items-center gap-4">
