@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>try{if(sessionStorage.getItem('pcbest-intro-seen')==='1')document.documentElement.dataset.introSeen='true';}catch{}</script>
+    <script>try{if(sessionStorage.getItem('pcbest-intro-seen')==='1')document.documentElement.dataset.introSeen='true';const welcome=JSON.parse(localStorage.getItem('pcbest-welcome-settings')||'null');if(welcome?.enabled===false)document.documentElement.dataset.introSeen='true';}catch{}</script>
     <title>PC BEST HYO-TIENDA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -130,11 +130,12 @@ html:not([data-intro-ready]) #pcbestIntro .intro-content,html:not([data-intro-re
 
 /* Elegant entrance: the logo stays in place while it fades in. */
 #pcbestIntro .intro-content{animation:introElegantFade .65s ease both;}
-#pcbestIntro .intro-logo{animation:introElegantFade .85s ease .1s both;}
+#pcbestIntro .intro-logo{animation:introGentleApproach 1.15s cubic-bezier(.2,.7,.3,1) .1s both;}
 #pcbestIntro .intro-brand{animation:introElegantFade .75s ease .25s both;background:#fff;-webkit-background-clip:text;background-clip:text;}
 #pcbestIntro .intro-tagline{animation:introElegantFade .8s ease .5s both;}
 #pcbestIntro::after{display:none;}
 @keyframes introElegantFade{from{opacity:0}to{opacity:1}}
+@keyframes introGentleApproach{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){#pcbestIntro .intro-content,#pcbestIntro .intro-logo,#pcbestIntro .intro-brand,#pcbestIntro .intro-tagline{animation:none!important;}}
 
 /* Uniform catalog cards with complete names and aligned purchase controls. */
@@ -573,6 +574,21 @@ html[data-store-theme="christmas"] .intro-christmas-scene{display:block;position
 #productGrid .catalog-card-price{font-size:21px;}
 #productGrid .catalog-card-add{width:46px;height:46px;min-width:46px;}
 }
+</style><style>
+/* A soft halo stays behind the welcome logo and follows the selected theme. */
+#pcbestIntro{--logo-halo-primary:rgba(56,189,248,.23);--logo-halo-secondary:rgba(59,130,246,.14);}
+html[data-store-theme="halloween"] #pcbestIntro{--logo-halo-primary:rgba(249,115,22,.24);--logo-halo-secondary:rgba(168,85,247,.19);}
+html[data-store-theme="christmas"] #pcbestIntro{--logo-halo-primary:rgba(245,211,141,.23);--logo-halo-secondary:rgba(34,197,94,.12);}
+#pcbestIntro .intro-logo::before{content:"";position:absolute;inset:-12%;z-index:-1;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse at 45% 45%,var(--logo-halo-primary),transparent 64%),radial-gradient(ellipse at 65% 60%,var(--logo-halo-secondary),transparent 70%);filter:blur(14px);opacity:.8;animation:introHaloBreathe 3s ease-in-out infinite;}
+@keyframes introHaloBreathe{0%,100%{opacity:.65;transform:scale(.97)}50%{opacity:.95;transform:scale(1.03)}}
+html:not([data-intro-ready]) #pcbestIntro .intro-logo::before{animation:none;}
+@media(prefers-reduced-motion:reduce){#pcbestIntro .intro-logo::before{animation:none;opacity:.8;transform:none;}}
+</style><style id="welcome-admin-controls">
+html[data-intro-preview="true"] #pcbestIntro{display:flex!important;}
+html[data-welcome-zoom="off"] #pcbestIntro .intro-logo{animation:introElegantFade .85s ease .1s both;}
+html[data-welcome-glow="off"] #pcbestIntro .intro-logo::before{display:none;}
+html[data-welcome-glow="off"] #pcbestIntro .intro-logo-image{filter:none!important;}
+@media(prefers-reduced-motion:reduce){html[data-welcome-zoom="off"] #pcbestIntro .intro-logo{animation:none!important;}}
 </style></head>
 
     <div id="pcbestIntro" aria-label="Bienvenido a PC BEST">
@@ -962,7 +978,7 @@ html[data-store-theme="christmas"] .intro-christmas-scene{display:block;position
 
             <!-- Admin Navigation -->
             <nav aria-label="Administración" class="admin-workspace-nav bg-[#030712] border-b border-sky-950 px-4 py-3">
-<div id="adminNavigation"><div class="admin-menu-group"><p class="admin-menu-label">General</p><button onclick="switchAdminTab('resumen')" id="adminTabBtn-resumen" class="admin-nav-btn active"><i class="fa-solid fa-gauge-high"></i><span>Resumen</span></button><button onclick="switchAdminTab('graficos')" id="adminTabBtn-graficos" class="admin-nav-btn"><i class="fa-solid fa-chart-pie"></i><span>Estadísticas</span></button></div><div class="admin-menu-group"><p class="admin-menu-label">Inventario</p><button onclick="switchAdminTab('productos')" id="adminTabBtn-productos" class="admin-nav-btn"><i class="fa-solid fa-boxes-stacked"></i><span>Productos</span></button><button onclick="switchAdminTab('categorias')" id="adminTabBtn-categorias" class="admin-nav-btn"><i class="fa-solid fa-layer-group"></i><span>Categorías</span></button></div><div class="admin-menu-group"><p class="admin-menu-label">Promociones</p><button onclick="switchAdminTab('banners')" id="adminTabBtn-banners" class="admin-nav-btn"><i class="fa-solid fa-images"></i><span>Banners</span></button><button onclick="switchAdminTab('descuentos')" id="adminTabBtn-descuentos" class="admin-nav-btn"><i class="fa-solid fa-ticket"></i><span>Descuentos</span></button></div><div class="admin-menu-group"><p class="admin-menu-label">Tienda</p><button onclick="switchAdminTab('temas')" id="adminTabBtn-temas" class="admin-nav-btn"><i class="fa-solid fa-palette"></i><span>Temas</span></button><button type="button" onclick="switchAdminTab('respaldo')" id="adminTabBtn-respaldo" class="admin-nav-btn"><i class="fa-solid fa-download"></i><span>Copia de seguridad</span></button><button onclick="switchAdminTab('pagos')" id="adminTabBtn-pagos" class="admin-nav-btn"><i class="fa-solid fa-wallet"></i><span>Pagos y contacto</span></button><button onclick="switchAdminTab('nosotros')" id="adminTabBtn-nosotros" class="admin-nav-btn"><i class="fa-solid fa-building"></i><span>Quiénes Somos</span></button></div>
+<div id="adminNavigation"><div class="admin-menu-group"><p class="admin-menu-label">General</p><button onclick="switchAdminTab('resumen')" id="adminTabBtn-resumen" class="admin-nav-btn active"><i class="fa-solid fa-gauge-high"></i><span>Resumen</span></button><button onclick="switchAdminTab('graficos')" id="adminTabBtn-graficos" class="admin-nav-btn"><i class="fa-solid fa-chart-pie"></i><span>Estadísticas</span></button></div><div class="admin-menu-group"><p class="admin-menu-label">Inventario</p><button onclick="switchAdminTab('productos')" id="adminTabBtn-productos" class="admin-nav-btn"><i class="fa-solid fa-boxes-stacked"></i><span>Productos</span></button><button onclick="switchAdminTab('categorias')" id="adminTabBtn-categorias" class="admin-nav-btn"><i class="fa-solid fa-layer-group"></i><span>Categorías</span></button></div><div class="admin-menu-group"><p class="admin-menu-label">Promociones</p><button onclick="switchAdminTab('banners')" id="adminTabBtn-banners" class="admin-nav-btn"><i class="fa-solid fa-images"></i><span>Banners</span></button><button onclick="switchAdminTab('descuentos')" id="adminTabBtn-descuentos" class="admin-nav-btn"><i class="fa-solid fa-ticket"></i><span>Descuentos</span></button></div><div class="admin-menu-group"><p class="admin-menu-label">Tienda</p><button onclick="switchAdminTab('temas')" id="adminTabBtn-temas" class="admin-nav-btn"><i class="fa-solid fa-palette"></i><span>Temas</span></button><button type="button" onclick="switchAdminTab('bienvenida')" id="adminTabBtn-bienvenida" class="admin-nav-btn"><i class="fa-solid fa-circle-play"></i><span>Bienvenida</span></button><button type="button" onclick="switchAdminTab('respaldo')" id="adminTabBtn-respaldo" class="admin-nav-btn"><i class="fa-solid fa-download"></i><span>Copia de seguridad</span></button><button onclick="switchAdminTab('pagos')" id="adminTabBtn-pagos" class="admin-nav-btn"><i class="fa-solid fa-wallet"></i><span>Pagos y contacto</span></button><button onclick="switchAdminTab('nosotros')" id="adminTabBtn-nosotros" class="admin-nav-btn"><i class="fa-solid fa-building"></i><span>Quiénes Somos</span></button></div>
                 </div>
             </nav>
 
@@ -986,6 +1002,20 @@ html[data-store-theme="christmas"] .intro-christmas-scene{display:block;position
 <p id="storeBackupStatus" role="status" aria-live="polite" class="text-sm text-sky-200"></p>
 <p class="text-xs text-slate-400">Conserva el archivo en un lugar seguro. La descarga no publica cambios ni sustituye Guardar Cambios.</p>
 </div></div>
+<div id="adminTabContent-bienvenida" class="admin-module space-y-4 hidden">
+<h3 class="text-xl text-white">Bienvenida de la tienda</h3>
+<p class="category-info">Configura la animación del inicio. Se muestra una vez por sesión de la pestaña y usa el tema elegido en Temas.</p>
+<form onsubmit="applyWelcomeSettings(event)" class="rounded-xl border border-sky-900 bg-slate-900/50 p-5 space-y-5">
+<label class="flex items-center gap-3 text-sm text-white"><input id="welcomeEnabled" type="checkbox" class="w-5 h-5"> Mostrar bienvenida al entrar</label>
+<label class="admin-field-label" for="welcomeDuration">Duración en segundos (1 a 8)</label>
+<input id="welcomeDuration" class="admin-field" type="number" min="1" max="8" step="1" value="3" required>
+<label class="flex items-center gap-3 text-sm text-white"><input id="welcomeZoom" type="checkbox" class="w-5 h-5"> Acercamiento suave del logo</label>
+<label class="flex items-center gap-3 text-sm text-white"><input id="welcomeGlow" type="checkbox" class="w-5 h-5"> Resplandor detrás del logo según el tema</label>
+<p class="text-xs text-slate-400">La entrada suave y el botón Omitir se mantienen. Los efectos respetan la opción de reducir movimiento del dispositivo.</p>
+<div class="flex flex-wrap gap-3"><button type="button" onclick="previewWelcomeSettings()" class="border border-sky-700 text-sky-200 rounded-lg px-4 py-3">Vista previa</button><button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-lg px-4 py-3">Aplicar configuración</button></div>
+<p id="welcomeSettingsStatus" role="status" class="text-sm text-sky-200"></p>
+<p class="text-xs text-slate-400">La vista previa permite revisar la animación aunque esté desactivada. Aplica la configuración y pulsa Guardar Cambios para publicarla.</p>
+</form></div>
 <div id="adminTabContent-temas" class="admin-module space-y-4 hidden"><h3 class="text-xl text-white">Temas de la tienda</h3><p class="category-info">Elige una apariencia y comprueba el resultado en tu tienda. Pulsa Guardar Cambios para publicarla.</p><div class="theme-choice-grid"><button type="button" id="themeChoice-christmas" class="theme-choice" onclick="chooseStoreTheme('christmas')" aria-pressed="false"><span class="theme-preview theme-preview-christmas"><span class="theme-preview-nav"></span><span class="theme-preview-title">NAVIDAD ✦</span><span class="theme-preview-cards"><i></i><i></i><i></i></span></span><span class="theme-choice-name">Navidad <span class="theme-choice-check">✓</span></span><span class="theme-choice-description">Verde pino, rojo y dorado. Luces cálidas, ramas de pino y una bienvenida navideña.</span></button><button type="button" id="themeChoice-halloween" class="theme-choice" onclick="chooseStoreTheme('halloween')" aria-pressed="true"><span class="theme-preview theme-preview-halloween"><span class="theme-preview-nav"></span><span class="theme-preview-moon"></span><span class="theme-preview-title">HALLOWEEN</span><span class="theme-preview-cards"><i></i><i></i><i></i></span></span><span class="theme-choice-name">Halloween <span class="theme-choice-check">✓</span></span><span class="theme-choice-description">Negro, naranja calabaza y violeta. Detalles de murciélagos y luz ambiental.</span></button><button type="button" id="themeChoice-original" class="theme-choice" onclick="chooseStoreTheme('original')" aria-pressed="false"><span class="theme-preview theme-preview-original"><span class="theme-preview-nav"></span><span class="theme-preview-title">PC BEST</span><span class="theme-preview-cards"><i></i><i></i><i></i></span></span><span class="theme-choice-name">Original azul <span class="theme-choice-check">✓</span></span><span class="theme-choice-description">La apariencia habitual de PC BEST con azul, celeste y fondo tecnológico.</span></button></div><p id="themeSelectionStatus" class="category-info" role="status"></p><button type="button" class="category-action" onclick="previewSelectedTheme()">Ver tema en la tienda</button></div>
 <div id="adminTabContent-pagos" class="admin-module space-y-4 hidden"><h3 class="text-xl text-white">Pagos y contacto</h3><p class="category-info">Aplica la configuración y luego pulsa Guardar Cambios para publicarla.</p><form onsubmit="applyPaymentSettings(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4"><label class="admin-field-label">WhatsApp de atención (código de país)<input id="settings-whatsapp" class="admin-field" required maxlength="100"></label><label class="admin-field-label">Titular Yape<input id="settings-yapeName" class="admin-field" required maxlength="100"></label><label class="admin-field-label">Número Yape<input id="settings-yapePhone" class="admin-field" required maxlength="100"></label><label class="admin-field-label">Titular BCP<input id="settings-bcpName" class="admin-field" required maxlength="100"></label><label class="admin-field-label">Cuenta BCP<input id="settings-bcpAccount" class="admin-field" required maxlength="100"></label><label class="admin-field-label">CCI BCP<input id="settings-bcpCCI" class="admin-field" required maxlength="100"></label><label class="admin-field-label">Cambiar QR Yape<input id="settings-qr-file" type="file" accept="image/png,image/jpeg,image/webp" class="admin-field" onchange="loadSettingsQR(event)"></label><img id="settings-qr-preview" alt="QR Yape actual" style="max-height:220px;max-width:100%;object-fit:contain"><p id="settings-payment-status" role="status" class="category-info"></p><button type="submit" class="category-action">Aplicar configuración</button></form></div>
                 <!-- RESUMEN -->
@@ -1394,6 +1424,14 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
         try{const saved=localStorage.getItem('pcbest-store-theme');if(['original','halloween','christmas'].includes(saved))cachedStoreTheme=saved;}catch{}
         let appearanceSettings={theme:cachedStoreTheme||'christmas'};
         let introThemeLocked=false;
+        function normalizeWelcomeSettings(value){
+            const v=value&&typeof value==='object'?value:{};
+            return {enabled:v.enabled!==false,duration:Number.isFinite(Number(v.duration))?Math.min(8,Math.max(1,Math.round(Number(v.duration)))):3,zoom:v.zoom!==false,glow:v.glow!==false};
+        }
+        let welcomeSettings=normalizeWelcomeSettings(null);
+        try{welcomeSettings=normalizeWelcomeSettings(JSON.parse(localStorage.getItem('pcbest-welcome-settings')||'null'));}catch{}
+        const welcomeIntroTemplate=document.getElementById('pcbestIntro')?.outerHTML||'';
+        let welcomePreviewSettings=null,welcomePreviewFocus=null;
         let promoBanners = [
             { id: 1, image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=1000&auto=format&fit=crop&q=80", title: "⚡ ¡Lo Último en Tarjetas Gráficas!" },
             { id: 2, image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=1000&auto=format&fit=crop&q=80", title: "💻 Ensamblajes Gamer de Alto Rendimiento" }
@@ -1514,7 +1552,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
 
         const EMBEDDED_PAYMENT_QR = paymentSettings.qr;
         let lastSaveResult={local:false,cloud:false,error:''};
-        function collectStoreData(){return {topBarMessages,promoBanners,categories,subcategories,products,discountCodes,aboutUs,paymentSettings,appearanceSettings};}
+        function collectStoreData(){return {topBarMessages,promoBanners,categories,subcategories,products,discountCodes,aboutUs,paymentSettings,appearanceSettings,welcomeSettings};}
         function buildStoreBackup(){
             return {format:'pcbest-store-backup',version:1,exportedAt:new Date().toISOString(),data:collectStoreData()};
         }
@@ -1550,6 +1588,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             if(!['original','halloween','christmas'].includes(data.appearanceSettings.theme))invalid();
             // Never pass object prototype keys from imported JSON into store configuration.
             JSON.stringify(data,(key,value)=>{if(['__proto__','prototype','constructor'].includes(key))invalid();return value;});
+            if(data.welcomeSettings!==undefined){const w=data.welcomeSettings;if(!object(w)||typeof w.enabled!=='boolean'||typeof w.zoom!=='boolean'||typeof w.glow!=='boolean'||!Number.isInteger(w.duration)||w.duration<1||w.duration>8)invalid();}
             return JSON.parse(JSON.stringify(data));
         }
         function cancelStoreRestore(){
@@ -1606,7 +1645,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
         }
         function restoreStoreData(record){
             for(const key of ['topBarMessages','promoBanners','categories','products','discountCodes'])if(record[key]&&!Array.isArray(record[key]))throw new Error('Datos de tienda inválidos');
-            if(record.topBarMessages)topBarMessages=record.topBarMessages;if(record.promoBanners)promoBanners=record.promoBanners;if(record.categories)categories=record.categories;if(record.subcategories)subcategories=record.subcategories;if(record.products)products=record.products;if(record.discountCodes)discountCodes=record.discountCodes;if(record.aboutUs)aboutUs={...aboutUs,...record.aboutUs};if(record.paymentSettings)paymentSettings={...paymentSettings,...record.paymentSettings,qr:record.paymentSettings.qr==='pcbest:embedded-yape-qr'?EMBEDDED_PAYMENT_QR:(record.paymentSettings.qr??paymentSettings.qr)};if(record.appearanceSettings)appearanceSettings={theme:['original','halloween','christmas'].includes(record.appearanceSettings.theme)?record.appearanceSettings.theme:'christmas'};
+            if(record.topBarMessages)topBarMessages=record.topBarMessages;if(record.promoBanners)promoBanners=record.promoBanners;if(record.categories)categories=record.categories;if(record.subcategories)subcategories=record.subcategories;if(record.products)products=record.products;if(record.discountCodes)discountCodes=record.discountCodes;if(record.aboutUs)aboutUs={...aboutUs,...record.aboutUs};if(record.paymentSettings)paymentSettings={...paymentSettings,...record.paymentSettings,qr:record.paymentSettings.qr==='pcbest:embedded-yape-qr'?EMBEDDED_PAYMENT_QR:(record.paymentSettings.qr??paymentSettings.qr)};if(record.appearanceSettings)appearanceSettings={theme:['original','halloween','christmas'].includes(record.appearanceSettings.theme)?record.appearanceSettings.theme:'christmas'};welcomeSettings=normalizeWelcomeSettings(record.welcomeSettings);
         }
         function storeBackupOperation(mode,value){return new Promise((resolve,reject)=>{
             if(!window.indexedDB){reject(new Error('Almacenamiento local no disponible'));return;}
@@ -2255,7 +2294,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
         }
 
         function switchAdminTab(tabName) {
-            const tabs = ['resumen','banners','nosotros','descuentos','categorias','productos','graficos','pagos','temas','respaldo'];
+            const tabs = ['resumen','banners','nosotros','descuentos','categorias','productos','graficos','pagos','temas','respaldo','bienvenida'];
             tabs.forEach(tab => {
                 const btn = document.getElementById('adminTabBtn-' + tab);
                 const content = document.getElementById('adminTabContent-' + tab);
@@ -2264,6 +2303,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
                 content.classList.toggle('hidden', tab !== tabName);
             });
             closeAdminMenu();
+            if(tabName==='bienvenida')loadWelcomeSettingsForm();
             if(tabName==='temas')renderThemeChoices();
             if(tabName==='pagos')loadPaymentSettingsForm();
             if (tabName === 'resumen') updateAdminSummary();
@@ -3053,24 +3093,30 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
         function finishStoreIntro(){
             if(introDismissed)return;
             introDismissed=true;
-            rememberIntroSeen();
+            if(!welcomePreviewSettings)rememberIntroSeen();
             clearTimeout(introTimer);
             const intro=document.getElementById('pcbestIntro');
             if(!intro){introThemeLocked=false;return;}
             const restoreFocus=intro.contains(document.activeElement);
             intro.classList.add('intro-hidden');
             setTimeout(()=>{
-                intro.remove();introThemeLocked=false;applyStoreTheme();
-                if(restoreFocus){const target=document.querySelector('header a, nav a, main button');if(target)target.focus({preventScroll:true});}
+                intro.remove();introThemeLocked=false;
+                const previewFocus=welcomePreviewFocus;welcomePreviewSettings=null;welcomePreviewFocus=null;delete document.documentElement.dataset.introPreview;
+                applyStoreTheme();
+                if(previewFocus?.isConnected)previewFocus.focus({preventScroll:true});
+                if(restoreFocus&&!previewFocus){const target=document.querySelector('header a, nav a, main button');if(target)target.focus({preventScroll:true});}
             },window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:360);
         }
         function startStoreIntro(){
             const intro=document.getElementById('pcbestIntro');
             if(!intro||introDismissed||document.documentElement.dataset.introReady)return;
+            const settings=welcomePreviewSettings||welcomeSettings;
+            if(!settings.enabled&&!welcomePreviewSettings){introDismissed=true;intro.remove();return;}
+            applyWelcomeVisuals(settings);
             introThemeLocked=true;
-            rememberIntroSeen();
+            if(!welcomePreviewSettings)rememberIntroSeen();
             document.documentElement.dataset.introReady='true';
-            introTimer=setTimeout(finishStoreIntro,3000);
+            introTimer=setTimeout(finishStoreIntro,settings.duration*1000);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -3198,7 +3244,34 @@ window.addEventListener('beforeunload',event=>{if(adminHasUnsavedChanges){event.
 })();
 </script>
 <script>
-function applyStoreTheme(){const theme=['original','halloween','christmas'].includes(appearanceSettings.theme)?appearanceSettings.theme:'christmas';try{localStorage.setItem('pcbest-store-theme',theme);}catch{}if(!introThemeLocked)document.documentElement.dataset.storeTheme=theme;renderThemeChoices();}
+function applyStoreTheme(){const theme=['original','halloween','christmas'].includes(appearanceSettings.theme)?appearanceSettings.theme:'christmas';try{localStorage.setItem('pcbest-store-theme',theme);}catch{}if(!introThemeLocked)document.documentElement.dataset.storeTheme=theme;applyWelcomeVisuals(welcomePreviewSettings||welcomeSettings);try{localStorage.setItem('pcbest-welcome-settings',JSON.stringify(welcomeSettings));}catch{}renderThemeChoices();}
+function applyWelcomeVisuals(settings){
+ document.documentElement.dataset.welcomeZoom=settings.zoom?'on':'off';
+ document.documentElement.dataset.welcomeGlow=settings.glow?'on':'off';
+}
+function loadWelcomeSettingsForm(){
+ document.getElementById('welcomeEnabled').checked=welcomeSettings.enabled;
+ document.getElementById('welcomeDuration').value=welcomeSettings.duration;
+ document.getElementById('welcomeZoom').checked=welcomeSettings.zoom;
+ document.getElementById('welcomeGlow').checked=welcomeSettings.glow;
+}
+function readWelcomeSettingsForm(){
+ return normalizeWelcomeSettings({enabled:document.getElementById('welcomeEnabled').checked,duration:document.getElementById('welcomeDuration').value,zoom:document.getElementById('welcomeZoom').checked,glow:document.getElementById('welcomeGlow').checked});
+}
+function applyWelcomeSettings(event){
+ event.preventDefault();welcomeSettings=readWelcomeSettingsForm();applyStoreTheme();setAdminDirty(true);
+ document.getElementById('welcomeSettingsStatus').textContent='Configuración aplicada. Pulsa Guardar Cambios para publicarla.';
+}
+function previewWelcomeSettings(){
+ const form=document.getElementById('welcomeDuration');if(!form.reportValidity())return;
+ clearTimeout(introTimer);document.getElementById('pcbestIntro')?.remove();
+ welcomePreviewSettings=readWelcomeSettingsForm();welcomePreviewFocus=document.activeElement;
+ const template=document.createElement('template');template.innerHTML=welcomeIntroTemplate;
+ const intro=template.content.firstElementChild;if(!intro)return;
+ document.body.append(intro);introDismissed=false;introThemeLocked=false;
+ document.documentElement.dataset.introPreview='true';delete document.documentElement.dataset.introReady;
+ applyStoreTheme();startStoreIntro();
+}
 function renderThemeChoices(){for(const theme of ['christmas','halloween','original']){const button=document.getElementById('themeChoice-'+theme);if(button)button.setAttribute('aria-pressed',String(appearanceSettings.theme===theme));}const status=document.getElementById('themeSelectionStatus');if(status)status.textContent='Tema seleccionado: '+({original:'Original azul',halloween:'Halloween',christmas:'Navidad'}[appearanceSettings.theme]||'Navidad')+'.';}
 function chooseStoreTheme(theme){if(!['halloween','original','christmas'].includes(theme))return;appearanceSettings={theme};applyStoreTheme();setAdminDirty(true);}
 function previewSelectedTheme(){document.getElementById('adminPanelModal').classList.add('hidden');document.body.classList.remove('admin-is-open');closeAdminMenu();window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
