@@ -2224,17 +2224,15 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
         }
 
         function sendToWhatsApp() {
-            if (cart.length === 0) return;
-            let msg = `Hola *PC Best*, solicito cotización de los siguientes componentes:%0A%0A`;
-            cart.forEach(item => {
-                const sub = item.price * item.qty;
-                msg += `• ${item.qty}x ${item.name} - S/. ${sub.toFixed(2)}%0A`;
-            });
-            const totals = calculateCartTotals();
-            msg += `%0A*Subtotal: S/. ${totals.subtotal.toFixed(2)}*`;
-            if (totals.discount > 0) msg += `%0A*Descuento (${encodeURIComponent(appliedDiscountCode)}): - S/. ${totals.discount.toFixed(2)}*`;
-            msg += `%0A*Total General: S/. ${totals.total.toFixed(2)}*%0A%0A¡Quedo atento para coordinar la entrega!`;
-            window.open(`https://wa.me/${paymentSettings.whatsapp}?text=${msg}`, '_blank');
+            if(cart.length===0)return;
+            const totals=calculateCartTotals();
+            const lines=['Hola *PC Best*, solicito cotización de los siguientes componentes:','',
+                ...cart.map(item=>'- '+item.qty+' x '+item.name+' - S/ '+(item.price*item.qty).toFixed(2)),
+                '', '*Subtotal: S/ '+totals.subtotal.toFixed(2)+'*',
+                ...(totals.discount>0?['*Descuento ('+appliedDiscountCode+'): - S/ '+totals.discount.toFixed(2)+'*']:[]),
+                '*Total General: S/ '+totals.total.toFixed(2)+'*','',
+                'Quedo atento para coordinar la entrega.'];
+            window.open('https://wa.me/'+paymentSettings.whatsapp+'?text='+encodeURIComponent(lines.join('\n')),'_blank','noopener,noreferrer');
         }
 
         function requestPin() {
@@ -3136,7 +3134,19 @@ function sendPaymentReceipt(event){
  event.preventDefault();if(!paymentSnapshot)return;
  const name=document.getElementById('paymentCustomer').value.trim();if(!name){document.getElementById('paymentCustomer').focus();return;}
  const method=document.getElementById('paymentMethod').value;
- const lines=['Hola PC Best, deseo enviar el comprobante de mi pedido.','Referencia: '+paymentSnapshot.reference,'Cliente: '+name,'Método: '+method,'Estado: PAGO PENDIENTE DE VERIFICACIÓN','',...paymentSnapshot.items.map(item=>item.qty+' x '+item.name+' — S/. '+(item.price*item.qty).toFixed(2)),'','Subtotal: S/. '+paymentSnapshot.subtotal.toFixed(2),'Descuento: S/. '+paymentSnapshot.discount.toFixed(2),'Total de productos: S/. '+paymentSnapshot.total.toFixed(2),'Envío por coordinar.','Adjuntaré el comprobante en este chat. Por favor verifiquen el ingreso.'];
+ const lines=[
+  '*Pedido PC BEST - '+paymentSnapshot.reference+'*',
+  'Cliente: '+name,
+  '',
+  ...paymentSnapshot.items.map(item=>'- '+item.qty+' x '+item.name+' - S/ '+(item.price*item.qty).toFixed(2)),
+  '',
+  ...(paymentSnapshot.discount>0?['*Descuento:* S/ '+paymentSnapshot.discount.toFixed(2)]:[]),
+  '*Total: S/ '+paymentSnapshot.total.toFixed(2)+'*',
+  '*Pago:* '+method+' - Pendiente de verificar',
+  '*Entrega:* por coordinar. Envío no incluido.',
+  '',
+  'Adjunto mi comprobante para revisión.'
+ ];
  window.open('https://wa.me/'+paymentSettings.whatsapp+'?text='+encodeURIComponent(lines.join('\n')),'_blank','noopener,noreferrer');
 }
 document.addEventListener('keydown',event=>{
