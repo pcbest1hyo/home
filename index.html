@@ -655,6 +655,88 @@ html[data-store-theme="halloween"] #productGrid .product-current-price{color:#fb
 html[data-store-theme="christmas"] #productGrid .product-current-price,html[data-store-theme="newyear"] #productGrid .product-current-price{color:#f3d281;}
 .admin-inventory-table .product-current-price{display:inline-block;}
 .admin-inventory-table .product-sale-badge{margin-left:6px;}
+</style><style id="admin-product-grid-style">
+#adminProductList.admin-product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,235px),1fr));gap:18px;align-items:stretch;}
+#adminProductList.admin-product-grid>*{margin:0;min-width:0;}
+#adminProductList .admin-product-card{display:flex;flex-direction:column;min-width:0;border:1px solid #29425f;border-radius:16px;overflow:hidden;background:#0b1629;box-shadow:0 8px 22px #0002;}
+#adminProductList .admin-product-media{height:200px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;padding:12px;}
+#adminProductList .admin-product-media img{width:100%;height:100%;object-fit:contain;}
+#adminProductList .admin-product-media img[hidden]{display:none;}
+#adminProductList .admin-product-image-missing{color:#475569;font-size:13px;text-align:center;}
+#adminProductList .admin-product-info{display:flex;flex-direction:column;flex:1;gap:10px;padding:16px;min-width:0;}
+#adminProductList .admin-product-name{margin:0;color:#f8fafc;font-size:15px;line-height:1.45;font-weight:700;overflow-wrap:anywhere;}
+#adminProductList .admin-product-category{margin:0;color:#a8bdd5;font-size:12px;line-height:1.4;overflow-wrap:anywhere;}
+#adminProductList .admin-product-price{color:#7dd3fc;font-size:17px;font-weight:700;line-height:1.4;}
+#adminProductList .admin-product-price .product-sale-badge{margin-left:6px;}
+#adminProductList .admin-product-sale-state{display:block;color:#cbd5e1;font-size:11px;font-weight:400;}
+#adminProductList .admin-product-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:#cbd5e1;font-size:12px;}
+#adminProductList .admin-product-stock,#adminProductList .admin-product-visibility{padding:4px 8px;border-radius:7px;background:#ffffff0d;}
+#adminProductList .stock-empty{color:#fca5a5;}#adminProductList .stock-low{color:#fcd34d;}#adminProductList .stock-available{color:#6ee7b7;}
+#adminProductList .admin-product-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:auto;padding-top:8px;}
+#adminProductList .admin-product-actions button{min-width:0;min-height:42px;text-align:center;white-space:normal;}
+@media(max-width:600px){#adminProductList.admin-product-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,180px),1fr));gap:12px;}#adminProductList .admin-product-media{height:180px;}#adminProductList .admin-product-info{padding:13px;}}
+@media(max-width:390px){#adminProductList.admin-product-grid{grid-template-columns:1fr;}#adminProductList .admin-product-media{height:210px;}}
+</style>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#102d60">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PC Best">
+<link rel="apple-touch-icon" href="./icono-192.png">
+<style id="pcbest-mobile-navigation">
+.pcbest-bottom-nav{display:none}
+@media screen and (max-width:767px){
+ body{padding-bottom:calc(80px + env(safe-area-inset-bottom));}
+ #productGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;}
+ #productGrid .catalog-card-media{height:clamp(125px,39vw,205px)}
+ #productGrid .catalog-card-media img{object-fit:contain}
+ #productGrid .catalog-card-body{padding:11px;gap:10px}
+ #productGrid .catalog-full-name{font-size:14px;line-height:1.35}
+ #productGrid .catalog-card-footer{flex-wrap:wrap;gap:8px}
+ #productGrid .catalog-card-price{font-size:18px;white-space:normal}
+ #productGrid .catalog-card-add{width:100%;min-height:44px;border-radius:10px;gap:8px}
+ #productGrid .catalog-card-add::after{content:'Agregar';font-size:12px;font-weight:700}
+ header .mobile-store-nav{display:none!important}
+ header button[aria-label="Abrir cotización"]{display:none!important}
+ .pcbest-floating-cart{display:none!important}
+ .pcbest-bottom-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;z-index:40;bottom:0;left:0;right:0;padding:7px 4px calc(7px + env(safe-area-inset-bottom));background:#0b1329;border-top:1px solid #284767;box-shadow:0 -8px 24px #0006}
+ .pcbest-bottom-nav a,.pcbest-bottom-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:48px;color:#cbd5e1;font-size:clamp(9px,2.7vw,11px);font-weight:700;background:transparent;border:0;text-decoration:none;cursor:pointer}
+ .pcbest-bottom-nav i{font-size:19px;color:#38bdf8}
+ .mobile-cart-icon{position:relative;display:inline-flex}.mobile-cart-count{position:absolute;top:-8px;right:-14px;display:flex;align-items:center;justify-content:center;min-width:19px;height:19px;padding:0 4px;border-radius:999px;background:#0284c7;color:white;font-size:10px;font-weight:800}.mobile-cart-count[hidden]{display:none} html[data-store-theme="halloween"] .mobile-cart-count{background:#c75b17}html[data-store-theme="christmas"] .mobile-cart-count,html[data-store-theme="newyear"] .mobile-cart-count{background:#d6b75d;color:#10202e}
+ .pcbest-bottom-nav :focus-visible{outline:2px solid #38bdf8;outline-offset:-2px;border-radius:8px}
+ html[data-store-theme="halloween"] .pcbest-bottom-nav{background:#1c1325;border-color:#703d54}
+ html[data-store-theme="halloween"] .pcbest-bottom-nav i{color:#fb923c}
+ html[data-store-theme="halloween"] .pcbest-bottom-nav a,html[data-store-theme="halloween"] .pcbest-bottom-nav button{color:#f9e7d8}
+ html[data-store-theme="christmas"] .pcbest-bottom-nav{background:#11291e;border-color:#5a6a46}
+ html[data-store-theme="christmas"] .pcbest-bottom-nav i{color:#f3d281}
+ html[data-store-theme="christmas"] .pcbest-bottom-nav a,html[data-store-theme="christmas"] .pcbest-bottom-nav button{color:#f3eddd}
+ html[data-store-theme="newyear"] .pcbest-bottom-nav{background:#142038;border-color:#847043}
+ html[data-store-theme="newyear"] .pcbest-bottom-nav i{color:#f3d281}
+ html[data-store-theme="newyear"] .pcbest-bottom-nav a,html[data-store-theme="newyear"] .pcbest-bottom-nav button{color:#f4eddb}
+ #cookieConsentBanner{bottom:calc(82px + env(safe-area-inset-bottom))}
+ body.admin-is-open .pcbest-bottom-nav{display:none}
+}
+@media print{.pcbest-bottom-nav{display:none!important}}
+</style><style id="mobile-catalog-filters-style">
+.mobile-catalog-filters,.mobile-cart-toast{display:none}
+@media screen and (max-width:767px){
+.mobile-catalog-filters{display:block;margin-bottom:14px;color:#e2e8f0}
+#categorias{display:none!important}
+.mobile-filter-chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.mobile-filter-chips button{background:#17375b;color:#e2e8f0;border:1px solid #386186;border-radius:999px;padding:6px 10px;font-size:12px}.mobile-filter-count{font-size:12px;color:#a9c5dc;margin:8px 0}
+.mobile-filter-toggle,.mobile-filter-apply{background:#0284c7;color:white;border:0;border-radius:10px;padding:10px 15px;font-weight:700;min-height:44px}
+.mobile-filter-panel{margin-top:10px;background:#0f2542;border:1px solid #275780;border-radius:14px;padding:14px}
+.mobile-filter-panel[hidden]{display:none}
+.mobile-filter-panel label{display:block;font-size:12px;font-weight:700;margin:10px 0 5px}
+.mobile-filter-panel select,.mobile-filter-panel input{width:100%;min-height:44px;border:1px solid #37678a;border-radius:9px;background:#0b1930;color:white;padding:9px}
+.mobile-filter-prices,.mobile-filter-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mobile-filter-actions{margin-top:14px}.mobile-filter-clear{border:1px solid #7192ad;border-radius:10px;color:white;background:transparent;font-weight:700;min-height:44px}
+.mobile-filter-error{color:#fca5a5;font-size:12px;margin-top:8px}
+.mobile-cart-toast.is-visible{display:block;position:fixed;z-index:45;bottom:calc(80px + env(safe-area-inset-bottom));left:12px;right:12px;max-width:440px;margin:auto;background:#075985;color:white;border:1px solid #38bdf8;border-radius:12px;padding:13px 16px;box-shadow:0 8px 24px #0007;font-size:14px;font-weight:700}
+html[data-store-theme="halloween"] .mobile-filter-panel{background:#1c1325;border-color:#703d54}
+html[data-store-theme="halloween"] :is(.mobile-filter-toggle,.mobile-filter-apply){background:#c75b17;color:white}html[data-store-theme="halloween"] .mobile-filter-panel :is(select,input){background:#251528;border-color:#82516a}html[data-store-theme="halloween"] .mobile-filter-chips button{background:#3a2132;border-color:#9a5540}html[data-store-theme="halloween"] .mobile-cart-toast.is-visible{background:#6a341b;border-color:#fb923c}
+html[data-store-theme="christmas"] :is(.mobile-filter-toggle,.mobile-filter-apply){background:#c4a455;color:#122117}html[data-store-theme="christmas"] .mobile-filter-panel :is(select,input){background:#10271c;border-color:#697950}html[data-store-theme="christmas"] .mobile-filter-chips button{background:#23402d;border-color:#8b9b62}html[data-store-theme="christmas"] .mobile-cart-toast.is-visible{background:#214b32;border-color:#d9b76c}
+html[data-store-theme="newyear"] :is(.mobile-filter-toggle,.mobile-filter-apply){background:#c7a95e;color:#101b30}html[data-store-theme="newyear"] .mobile-filter-panel :is(select,input){background:#101b30;border-color:#847043}html[data-store-theme="newyear"] .mobile-filter-chips button{background:#26334a;border-color:#a38a50}html[data-store-theme="newyear"] .mobile-cart-toast.is-visible{background:#27334a;border-color:#f3d281}html[data-store-theme="christmas"] .mobile-filter-panel{background:#11291e;border-color:#5a6a46}html[data-store-theme="newyear"] .mobile-filter-panel{background:#142038;border-color:#847043}
+}
 </style></head>
 
     <div id="pcbestIntro" aria-label="Bienvenido a PC BEST">
@@ -829,7 +911,17 @@ html[data-store-theme="christmas"] #productGrid .product-current-price,html[data
                         </select>
                     </div>
                 </div>
-                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <div class="mobile-catalog-filters">
+<button type="button" class="mobile-filter-toggle" aria-expanded="false" aria-controls="mobileFilterPanel" onclick="toggleMobileFilters()"><i class="fa-solid fa-filter" aria-hidden="true"></i> Filtrar</button>
+<div id="mobileFilterChips" class="mobile-filter-chips" aria-label="Filtros activos"></div><p id="mobileFilterCount" class="mobile-filter-count" aria-live="polite"></p>
+<div class="mobile-filter-panel" id="mobileFilterPanel" hidden>
+<label for="mobileFilterCategory">Categoría</label><select id="mobileFilterCategory" onchange="updateMobileSubcategories()"></select>
+<div id="mobileSubcategoryField" hidden><label for="mobileFilterSubcategory">Subcategoría</label><select id="mobileFilterSubcategory"><option value="todos">Todas las subcategorías</option></select></div>
+<label>Precio (S/)</label><div class="mobile-filter-prices"><input id="mobileFilterMin" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Mínimo" aria-label="Precio mínimo"><input id="mobileFilterMax" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Máximo" aria-label="Precio máximo"></div>
+<label for="mobileFilterStock">Disponibilidad</label><select id="mobileFilterStock"><option value="all">Todos</option><option value="available">Disponible</option><option value="empty">Agotado</option></select>
+<p id="mobileFilterError" class="mobile-filter-error" role="alert" hidden></p>
+<div class="mobile-filter-actions"><button type="button" class="mobile-filter-clear" onclick="clearMobileFilters()">Limpiar</button><button type="button" class="mobile-filter-apply" onclick="applyMobileFilters()">Aplicar filtros</button></div></div></div>
+<div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 <div id="noResults" class="hidden text-center py-20">
                     <i class="fa-solid fa-box-open text-5xl text-sky-500 mb-4 animate-bounce"></i>
                     <h3 class="text-lg font-bold text-slate-300">No encontramos ningún producto con esos datos</h3>
@@ -896,7 +988,7 @@ html[data-store-theme="christmas"] #productGrid .product-current-price,html[data
     </section>
 
     <!-- Floating Cart Bar -->
-    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-md px-4">
+    <div class="pcbest-floating-cart fixed bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-md px-4">
         <div class="bg-[#0b1329]/90 backdrop-blur-md border border-sky-500/40 p-4 rounded-2xl shadow-2xl flex items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-sky-500/20 text-sky-400 rounded-xl flex items-center justify-center font-bold">
@@ -1613,6 +1705,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
         let priceFilterMin = 0;
         let priceFilterMax = Infinity;
         let productSort = 'default';
+        let mobileStockFilter = 'all';
         let currentAdminCategory = 'todos';
         let cart = [];
         let appliedDiscountCode = '';
@@ -2068,7 +2161,8 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
                 const matchSub = currentSubcategory === 'todos' || p.subcategory === currentSubcategory;
                 const matchSearch = productMatchesSearch(p, searchVal);
                 const matchPrice = price >= priceFilterMin && price <= priceFilterMax;
-                return matchCat && matchSub && matchSearch && matchPrice;
+                const matchStock = mobileStockFilter === 'all' || (mobileStockFilter === 'available' ? Number(p.stock) > 0 : !(Number(p.stock) > 0));
+                return matchCat && matchSub && matchSearch && matchPrice && matchStock;
             });
 
             if (productSort === 'priceAsc') {
@@ -2078,6 +2172,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             }
 
             counter.innerText = `Mostrando ${filtered.length} producto(s)`;
+            if (typeof updateMobileFilterSummary === 'function') updateMobileFilterSummary(filtered.length);
 
             if (filtered.length === 0) {
                 grid.innerHTML = '';
@@ -2311,6 +2406,7 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             }
             renderCartCount();
             bounceQuotationCart();
+            showMobileCartToast();
         }
 
         function calculateCartTotals() {
@@ -2332,6 +2428,8 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             const totalCount = cart.reduce((acc, item) => acc + item.qty, 0);
             const totals = calculateCartTotals();
             document.getElementById('cartCount').innerText = totalCount;
+            const mobileCount = document.getElementById('mobileCartCount');
+            if (mobileCount) { mobileCount.textContent = totalCount > 99 ? '99+' : String(totalCount); mobileCount.hidden = totalCount === 0; const button = mobileCount.closest('button'); if (button) button.setAttribute('aria-label', 'Abrir cotización, ' + totalCount + (totalCount === 1 ? ' producto' : ' productos')); }
             document.getElementById('floatingCartTotal').innerText = `S/. ${totals.total.toFixed(2)} (${totalCount} ítems)`;
         }
 
@@ -2895,24 +2993,25 @@ https://ejemplo.com/imagen-2.jpg" class="w-full bg-[#0b1329] border border-sky-9
             const countEl=document.getElementById('adminProductCount'); if(countEl) countEl.textContent=`${filtered.length} de ${products.length} productos`;
             list.replaceChildren();
             if(!filtered.length){const empty=document.createElement('p');empty.className='category-info';empty.textContent='No se encontraron productos con estos filtros.';list.append(empty);return;}
-            const wrap=document.createElement('div');wrap.className='admin-inventory-wrap';
-            const table=document.createElement('table');table.className='admin-inventory-table';
-            const caption=document.createElement('caption');caption.textContent='Inventario de productos';caption.className='sr-only';table.append(caption);
-            const head=document.createElement('thead'),header=document.createElement('tr');
-            ['Producto','Categoría','Precio','Stock','Visibilidad','Acciones'].forEach(label=>{const th=document.createElement('th');th.scope='col';th.textContent=label;header.append(th);});head.append(header);table.append(head);
-            const body=document.createElement('tbody');
+            list.classList.add('admin-product-grid');
             filtered.forEach(product=>{
-                const row=document.createElement('tr');
-                const cell=(label)=>{const td=document.createElement('td');td.dataset.label=label;row.append(td);return td;};
-                const identity=cell('Producto'),image=document.createElement('img'),name=document.createElement('span');identity.className='inventory-identity';image.src=product.image||'https://placehold.co/100x100/0b1329/38bdf8?text=PC';image.alt='';image.loading='lazy';name.textContent=product.name;identity.append(image,name);
-                cell('Categoría').textContent=product.category+(product.subcategory?' › '+product.subcategory:'');
-                const priceCell=cell('Precio');priceCell.innerHTML=productPriceMarkup(product);
-                const saleState=productSaleState(product);if(saleState){const state=document.createElement('small');state.style.display='block';state.textContent=saleState+' (Perú)';priceCell.append(state);}
-                const stock=cell('Stock');stock.textContent=Number(product.stock)||0;stock.style.color=Number(product.stock)<=0?'#fca5a5':Number(product.stock)<=5?'#fcd34d':'#6ee7b7';
-                cell('Visibilidad').textContent=product.active===false?'Oculto':'Visible';
-                const actions=cell('Acciones');actions.className='inventory-actions';
-                actions.append(categoryControl('Editar',()=>openProductForm(product.id)),categoryControl('Duplicar',()=>duplicateProduct(product.id)),categoryControl(product.active===false?'Activar':'Ocultar',()=>{toggleProductVisibility(product.id);setAdminDirty(true);}),categoryControl('Eliminar',()=>{deleteProduct(product.id);setAdminDirty(true);}));body.append(row);
-            });table.append(body);wrap.append(table);list.append(wrap);
+                const card=document.createElement('article');card.className='admin-product-card';
+                const media=document.createElement('div');media.className='admin-product-media';
+                const image=document.createElement('img');image.src=product.image||'https://placehold.co/400x400/0b1329/38bdf8?text=PC';image.alt=product.name||'Producto';image.loading='lazy';image.decoding='async';
+                image.addEventListener('error',()=>{image.hidden=true;const missing=document.createElement('span');missing.className='admin-product-image-missing';missing.textContent='Imagen no disponible';media.append(missing);},{once:true});media.append(image);
+                const info=document.createElement('div');info.className='admin-product-info';
+                const name=document.createElement('h4');name.className='admin-product-name';name.textContent=product.name;
+                const category=document.createElement('p');category.className='admin-product-category';category.textContent=product.category+(product.subcategory?' › '+product.subcategory:'');
+                const price=document.createElement('div');price.className='admin-product-price';price.innerHTML=productPriceMarkup(product);
+                const saleState=productSaleState(product);if(saleState){const state=document.createElement('small');state.className='admin-product-sale-state';state.textContent=saleState+' (Perú)';price.append(state);}
+                const meta=document.createElement('div');meta.className='admin-product-meta';
+                const stock=document.createElement('span');const stockValue=Number(product.stock)||0;stock.className='admin-product-stock '+(stockValue<=0?'stock-empty':stockValue<=5?'stock-low':'stock-available');stock.textContent='Stock: '+stockValue;
+                const visibility=document.createElement('span');visibility.className='admin-product-visibility';visibility.textContent=product.active===false?'Oculto':'Visible';meta.append(stock,visibility);
+                const actions=document.createElement('div');actions.className='admin-product-actions';
+                const buttons=[categoryControl('Editar',()=>openProductForm(product.id)),categoryControl('Duplicar',()=>duplicateProduct(product.id)),categoryControl(product.active===false?'Activar':'Ocultar',()=>{toggleProductVisibility(product.id);setAdminDirty(true);}),categoryControl('Eliminar',()=>{const before=products.length;deleteProduct(product.id);if(products.length!==before)setAdminDirty(true);})];
+                buttons.forEach(button=>{button.setAttribute('aria-label',button.textContent+' '+product.name);actions.append(button);});
+                info.append(name,category,price,meta,actions);card.append(media,info);list.append(card);
+            });
         }
 
         function renderAdminCharts() {
@@ -3450,5 +3549,50 @@ function previewSelectedTheme(){document.getElementById('adminPanelModal').class
 applyStoreTheme();
 if(cachedStoreTheme)startStoreIntro();
 </script>
-</body>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => {}));
+}
+</script>
+<nav class="pcbest-bottom-nav" aria-label="Navegación móvil">
+<a href="#" aria-label="Ir al inicio"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Inicio</span></a>
+<button type="button" onclick="openMobileFilters()"><i class="fa-solid fa-grip" aria-hidden="true"></i><span>Categorías</span></button>
+<a href="#promoBannerContainer" onclick="goToOffers(event)"><i class="fa-solid fa-tag" aria-hidden="true"></i><span>Ofertas</span></a>
+<button type="button" onclick="document.getElementById('searchInput').scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('searchInput').focus({preventScroll:true})"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Buscar</span></button>
+<button type="button" onclick="toggleCartModal()" aria-label="Abrir cotización"><span class="mobile-cart-icon"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i><span id="mobileCartCount" class="mobile-cart-count" hidden aria-hidden="true">0</span></span><span>Cotización</span></button>
+</nav><div id="mobileCartToast" class="mobile-cart-toast" role="status" aria-live="polite">✓ Producto agregado a tu cotización</div>
+<script>
+renderCartCount();
+let mobileToastTimer;
+function showMobileCartToast(){const el=document.getElementById('mobileCartToast');el.classList.add('is-visible');clearTimeout(mobileToastTimer);mobileToastTimer=setTimeout(()=>el.classList.remove('is-visible'),2600)}
+function updateMobileSubcategories(selected='todos'){
+ const cat=document.getElementById('mobileFilterCategory').value, select=document.getElementById('mobileFilterSubcategory');
+ select.replaceChildren(new Option('Todas las subcategorías','todos'));
+ const names=cat==='todos'?[]:[...new Set([...(subcategories[cat]||[]),...products.filter(p=>p.category===cat && p.subcategory).map(p=>p.subcategory)])];
+ names.forEach(name=>select.add(new Option(name,name)));select.value=names.includes(selected)?selected:'todos';select.disabled=cat==='todos'||!names.length;document.getElementById('mobileSubcategoryField').hidden=select.disabled;
+}
+function toggleMobileFilters(){
+ const panel=document.getElementById('mobileFilterPanel'),btn=document.querySelector('.mobile-filter-toggle');
+ if(panel.hidden){const sel=document.getElementById('mobileFilterCategory');sel.replaceChildren(new Option('Todos los productos','todos'));categories.forEach(c=>sel.add(new Option(c,c)));sel.value=currentCategory;updateMobileSubcategories(currentSubcategory);document.getElementById('mobileFilterMin').value=priceFilterMin||'';document.getElementById('mobileFilterMax').value=Number.isFinite(priceFilterMax)?priceFilterMax:'';document.getElementById('mobileFilterStock').value=mobileStockFilter;}
+ panel.hidden=!panel.hidden;btn.setAttribute('aria-expanded',String(!panel.hidden));
+}
+function openMobileFilters(){if(document.getElementById('mobileFilterPanel').hidden)toggleMobileFilters();document.querySelector('.mobile-catalog-filters').scrollIntoView({behavior:'smooth',block:'start'});}
+function applyMobileFilters(){
+ const min=document.getElementById('mobileFilterMin'),max=document.getElementById('mobileFilterMax'),error=document.getElementById('mobileFilterError');
+ const a=min.value===''?0:Number(min.value),b=max.value===''?Infinity:Number(max.value);
+ if(!Number.isFinite(a)||a<0||b<0||a>b){error.textContent='Revisa los precios: el mínimo debe ser menor o igual al máximo.';error.hidden=false;return}
+ error.hidden=true;priceFilterMin=a;priceFilterMax=b;mobileStockFilter=document.getElementById('mobileFilterStock').value;currentCategory=document.getElementById('mobileFilterCategory').value;currentSubcategory=document.getElementById('mobileFilterSubcategory').value;renderCategories();renderSubcategories();renderProducts();toggleMobileFilters();
+}
+function clearMobileFilters(){document.getElementById('mobileFilterCategory').value='todos';updateMobileSubcategories();document.getElementById('mobileFilterMin').value='';document.getElementById('mobileFilterMax').value='';document.getElementById('mobileFilterStock').value='all';applyMobileFilters()}
+function updateMobileFilterSummary(count){
+ const box=document.getElementById('mobileFilterChips'),label=document.getElementById('mobileFilterCount');if(!box||!label)return;
+ label.textContent=count+' '+(count===1?'producto encontrado':'productos encontrados');box.replaceChildren();
+ function chip(text,clear){const btn=document.createElement('button');btn.type='button';btn.textContent=text+' ×';btn.setAttribute('aria-label','Quitar filtro '+text);btn.addEventListener('click',()=>{clear();renderCategories();renderSubcategories();renderProducts()});box.append(btn)}
+ if(currentCategory!=='todos')chip(currentCategory,()=>{currentCategory='todos';currentSubcategory='todos'});
+ if(currentSubcategory!=='todos')chip(currentSubcategory,()=>currentSubcategory='todos');
+ if(priceFilterMin>0)chip('Desde S/ '+priceFilterMin,()=>priceFilterMin=0);
+ if(Number.isFinite(priceFilterMax))chip('Hasta S/ '+priceFilterMax,()=>priceFilterMax=Infinity);
+ if(mobileStockFilter!=='all')chip(mobileStockFilter==='available'?'Disponible':'Agotado',()=>mobileStockFilter='all');
+}
+</script></body>
 </html>

@@ -1,0 +1,7 @@
+PC BEST - VERSIÓN PARA CELULAR
+
+Sube todos los archivos de esta carpeta a la raíz del repositorio home de GitHub, reemplazando index.html y conservando los demás archivos. Después de que se publique, abre tu página en el celular.
+
+En Android usa Chrome → menú → Instalar aplicación o Agregar a pantalla principal. En iPhone usa Safari → Compartir → Agregar a pantalla de inicio.
+
+Incluye navegación inferior y tarjetas adaptadas al celular. La tienda necesita conexión a internet.
